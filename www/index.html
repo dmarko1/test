@@ -1,49 +1,492 @@
 <!DOCTYPE html>
-<!--
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
-<html>
-    <head>
-        <!--
-        Customize this policy to fit your own app's needs. For more guidance, see:
-            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
-        Some notes:
-            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
-            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
-            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
-                * Enable inline JS: add 'unsafe-inline' to default-src
-        -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
-        <meta name="format-detection" content="telephone=no">
-        <meta name="msapplication-tap-highlight" content="no">
-        <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
-        <link rel="stylesheet" type="text/css" href="css/index.css">
-        <title>Hello World</title>
-    </head>
-    <body>
-        <div class="app">
-            <h1>Apache Cordova</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/onsenui.min.css">
+    <link rel="stylesheet" href="static/onsen-css-components.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+    <script src="static/onsenui.min.js"></script>
+    <link rel="stylesheet" href="static/jqcandlestick.css">
+    <link rel="stylesheet" href="static/main.css">
+</head>
+<body>
+    <ons-navigator swipeable id="myNavigator" page="tabbar.html"></ons-navigator>
+    <template id="home.html">
+        <ons-page>
+            <div style="top:40%;" class="card shadow">
+                <div class="jumbotron bg-white pt-0 text-center">
+                    <h2>Welcome</h2>
+                    <p class="text-left">Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum nam eum saepe provident dolores ab sapiente blanditiis laboriosam nobis id iusto aut, eaque, pariatur magnam voluptatum eius aliquam, facilis dignissimos.</p>
+                    <button onclick="topage('tabbar', null)" class="btn btn-secondary">
+                        Get Started
+                    </button>
+                </div>
             </div>
-        </div>
-        <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
-    </body>
+        </ons-page>
+    </template>
+    <template id="tabbar.html">
+        <ons-page id="tabbar-page">
+          <ons-tabbar swipeable id="appTabbar" position="auto">
+            <ons-tab label="Home" icon="fa-home" page="main.html" active></ons-tab>
+            <ons-tab label="Discover" icon="fa-trophy" page="discover.html"></ons-tab>
+            <ons-tab label="News" icon="fa-bookmark" page="news.html"></ons-tab>
+            <ons-tab label="Portfolio" icon="fa-user" page="watch.html"></ons-tab>
+          </ons-tabbar>
+          <script>
+            ons.getScriptPage().addEventListener('prechange', function(event) {
+              if (event.target.matches('#appTabbar')) {
+                event.currentTarget.querySelector('ons-toolbar .center').innerHTML = event.tabItem.getAttribute('label');
+              }
+            });
+          </script>
+        </ons-page>
+    </template>
+    <template id="main.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <p class="text-warning"> Beta </p>
+                </div>
+                <div class="center mr-3">Discovery</div>
+            </ons-toolbar>
+            <div>
+                <marquee direction="right" class="container jumbotron bg-dark mt-0 mb-0 pt-1 pb-1">
+                    <span class="text-danger"> All 1.1% </span> - 
+                    <span class="text-success"> DOW Jones 5.8% </span> - 
+                    <span class="text-danger"> S&P 500 2.8%  </span> - 
+                    <span class="text-success"> NASDAQ 1.8% </span>
+                </marquee>
+            </div> <hr>
+            <div class="jumbotron shadow pt-0 pb-0">
+                <h3> TRD Beta 1.0 </h3>
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iste officia sapiente libero rem ex animi, perspiciatis, illum corrupti nesciunt nihil assumenda eum explicabo ut esse inventore repellat debitis maiores reiciendis.</p>
+            </div> 
+            <hr>
+            <div id="demo">
+
+            </div>
+            <hr class="m-0 p-0">
+            <form action="" class="form-inline">
+                <input id="ticker" type="text" placeholder="Scan a Ticker" class="form-control w-75">
+                <button onclick="search_ticker()" class="btn btn-dark p-1 m-1"> <i class="fa fa-search" aria-hidden="true"></i> Search </button>
+            </form>
+            <hr class="m-0 p-0">
+            <div class="card shadow pb-0 pl-0 pr-0">
+                <h5 class="card-title">
+                    Spotted Activity 
+                </h5>
+                <!-- Add an extra div with a graph -->
+                <!-- <p class="card-body text-muted">Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus excepturi consequuntur dolore, ab non consectetur corporis voluptatum aperiam rerum! Repellendus esse ut atque laboriosam consequatur voluptatum, similique corrupti quos nam.</p> -->
+                <table class="table table-striped">
+                    <tr class="bg-dark text-white">
+                        <th> Symbol </th>
+                        <th> Volume </th>
+                        <th> Spread %</th>
+                        <th> StockPrice </th>
+                        <th> Comment </th>
+                    </tr>
+                    <tr class="text-danger">
+                        <td> TSLA </td>
+                        <td> 250 </td>
+                        <td> 15% </td>
+                        <td> 158$ </td>
+                        <td> Likely to drop </td>
+                    </tr>
+                    <tr class="text-success">
+                        <td> AAPL </td>
+                        <td> 250 </td>
+                        <td> 15% </td>
+                        <td> 158$ </td>
+                        <td class="text-success"> Likely to rise </td>
+                    </tr>
+                    <tr class="text-success">
+                        <td> NVAX </td>
+                        <td> 250 </td>
+                        <td> 15% </td>
+                        <td> 158$ </td>
+                        <td> Likely to rise </td>
+                    </tr>
+                </table>
+                <div class="card-footer" style="background-color: #f5f5f5;">
+                    Updated 40 mins Ago
+                </div>
+            </div>
+            <script>
+                ons.getScriptPage().onInit = function() {
+                    // Hooks are bound to the page element
+                    // var name = "David";
+                    // this.querySelector('#demo').innerHTML = '<h1> My name is '+name+' </h1>';
+                    // this.onShow = function() {};
+                };
+            </script>
+        </ons-page>
+    </template>
+    <template id="news.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <p class="text-warning"> Beta </p>
+                </div>
+                <div class="center mr-3"> News and Events </div>
+            </ons-toolbar>
+            <div class="card-deck">
+                <ons-card class="card w-45 p-1 m-1 bg-dark text-white">
+                    <span style="font-size: 100px;" class="p-4 card-img text-center fas fa-hashtag"> </span>
+                    <div class="card-img-overlay">
+                        <p class="card-text text-success align-text-bottom"> Sentiment </p>
+                    </div>
+                </ons-card>
+                <ons-card class="card w-45 p-1 m-1 bg-dark text-white">
+                    <span style="font-size: 100px;" class="p-4 card-img text-center fas fa-rss"> </span>
+                    <div class="card-img-overlay">
+                        <p class="card-text text-success align-text-bottom"> RSS </p>
+                    </div>
+                </ons-card>
+            </div>
+            <div class="card-deck">
+                <ons-card class="card p-1 m-1 bg-dark text-white">
+                    <span style="font-size: 100px;" class="p-4 card-img text-center fas fa-twitter"> </span>
+                    <div class="card-img-overlay">
+                        <p class="card-text text-success align-text-bottom"> Twitter </p>
+                    </div>
+                </ons-card>
+            </div> <hr>
+            Featured News
+            <ons-card onclick="topage('viewpost', {'data':{'postid':5}})" class="card p-1 m-1 shadow">
+                <img class="card-img-top" src="/images/pathToYourImage.png" alt="Card image cap">
+                <div class="card-title"> Some Major Headline here  </div>
+                <p class="card-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam culpa voluptas quas, corrupti ipsam beatae, voluptatum commodi saepe pariatur reprehenderit, adipisci facere. Deleniti eum deserunt inventore veritatis natus! Iure, libero.</p>
+                <div class="card-footer">
+                    4 secs ago 
+                </div>
+            </ons-card>
+            <ons-card onclick="topage('viewpost', {'data':{'postid':5}})" class="card p-1 m-1 shadow">
+                <img class="card-img-top" src="/images/pathToYourImage.png" alt="Card image cap">
+                <div class="card-title"> Some Major Headline here  </div>
+                <p class="card-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam culpa voluptas quas, corrupti ipsam beatae, voluptatum commodi saepe pariatur reprehenderit, adipisci facere. Deleniti eum deserunt inventore veritatis natus! Iure, libero.</p>
+                <div class="card-footer">
+                    4 secs ago 
+                </div>
+            </ons-card>
+            <style>
+                .w-45 {
+                    width: 45%;
+                }
+            </style>
+        </ons-page>
+    </template>
+    <template id="viewpost.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-back-button> Back </ons-back-button>
+                </div>
+                <div class="center mr-3"> </div>
+            </ons-toolbar>
+            <img src="" alt="" class="w-100">
+            <h4>Title Here</h4>
+            <p class="text-muted"> MSNBC </p>
+            <hr>
+            <p>
+                <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga id ipsa quisquam? Laborum saepe cumque, corporis quidem, labore illo temporibus deleniti nesciunt eaque numquam voluptatum error, quo eos maiores eveniet?</span>
+                <span>Dolorem reiciendis debitis dolorum facilis quod commodi eligendi molestias saepe itaque voluptates distinctio alias earum esse, amet impedit quis expedita et dignissimos consequuntur exercitationem necessitatibus ea nobis libero voluptatibus? Possimus.</span>
+                <span>In debitis ab magnam, ducimus iure deleniti doloribus molestiae eius quia laboriosam, porro quas provident corrupti id sunt eum dignissimos voluptas quae, ipsam maiores sequi expedita totam? Maxime, accusamus eius?</span>
+                <span>Explicabo exercitationem distinctio error consequatur doloribus, itaque libero provident facilis, eveniet, voluptatibus excepturi minima quaerat alias aspernatur maxime voluptates eligendi tenetur eaque quod ducimus nemo? Voluptatum voluptates exercitationem illo quas.</span>
+            </p>
+        </ons-page>
+    </template>
+    <template id="discover.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <p class="text-warning"> Beta </p>
+                </div>
+                <div class="center mr-3">Discovery</div>
+            </ons-toolbar>
+            <form action="" class="form-inline">
+                <input type="text" placeholder="Scan a Ticker" class="form-control w-75">
+                <button class="btn btn-dark p-1 m-1"> <i class="fa fa-search" aria-hidden="true"></i> Search </button>
+            </form> <hr>
+            <div id="accordion" role="tablist">
+                <table class="text-muted" width="100%">
+                    <tr>
+                        <th style="width: 90%;"> Symbol </th>
+                        <th> IV % </th>
+                    </tr>
+                </table>
+                <div class="card p-0 shadow">
+                  <div class="card-header bg-success" role="tab" id="headingOne">
+                    <h5 class="mb-0">
+                      <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="text-white">
+                        AAPL - Apple Inc
+                      </a>
+                      <i class="fa fa-arrow-up text-white float-right" aria-hidden="true"> 2.3% </i>
+                    </h5>
+                  </div> 
+                  <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne" style="">
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <tr>
+                                <th>Type</th>
+                                <td>PUT</td>
+                            </tr>
+                            <tr>
+                                <th> Price </th>
+                                <td> 46.33 </td>
+                            </tr>
+                            <tr>
+                                <th> Strike </th>
+                                <td> 35.00 </td>
+                            </tr>
+                            <tr>
+                                <th> Expiry </th>
+                                <td> 38 days </td>
+                            </tr>
+                            <tr>
+                                <th> Volume </th>
+                                <td> 10,073 </td>
+                            </tr>
+                        </table>
+                        <button onclick="topage('ticker', {'data': {'symbol': 'AAPL'}})" class="btn btn-dark"> View </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="card p-0 shadow">
+                  <div class="card-header bg-success" role="tab" id="headingTwo">
+                    <h5 class="mb-0">
+                      <a class="collapsed text-white" data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        TSLA - Tesla Inc.
+                      </a>
+                      <i class="fa fa-arrow-up text-white float-right" aria-hidden="true"> 15% </i>
+                    </h5>
+                  </div>
+                  <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo" style="">
+                    <div class="card-body">
+                      Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
+                    </div>
+                  </div>
+                </div>
+                <div class="card p-0 shadow">
+                    <div class="card-header bg-warning" role="tab" id="headingTwo">
+                      <h5 class="mb-0">
+                        <a class="collapsed text-white" data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                          NVAX - Navavax Inc.
+                        </a>
+                        <i class="fa fa-arrow-down text-white float-right" aria-hidden="true"> 2.3% </i>
+                      </h5>
+                    </div>
+                    <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo" style="">
+                      <div class="card-body">
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </ons-page>
+    </template>
+    <template id="watch.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <p class="text-warning"> Beta </p>
+                </div>
+                <div class="center mr-3"> Watchlists </div>
+            </ons-toolbar>
+            Welcome to the watchlist page
+        </ons-page>
+    </template>
+    <template id="ticker.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-back-button> Back </ons-back-button>
+                </div>
+                <div class="center mr-3"> </div>
+            </ons-toolbar>
+            Show information about a specific ticker
+            <script>
+                ons.getScriptPage().onInit = function () {
+                    this.querySelector('ons-toolbar div.center').innerHTML = this.data.symbol;
+                }
+            </script>
+        </ons-page>
+    </template>
+    <template id="filter.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-back-button> Cancel </ons-back-button>
+                </div>
+                <div class="center mr-3"> Filter Searches </div>
+            </ons-toolbar>
+            Filter Settings
+            <form action="" class="container">
+                <fieldset>
+                    <legend> Industry </legend>
+                    <div class="segment" style="width: 280px; margin: 0 auto;">
+                        <div class="segment__item">
+                          <input type="radio" class="segment__input" name="segment-a" checked>
+                          <div class="segment__button"> Any </div>
+                        </div>
+                        <div class="segment__item">
+                          <input type="radio" class="segment__input" name="segment-a">
+                          <div class="segment__button"> Health </div>
+                        </div>
+                        <div class="segment__item">
+                          <input type="radio" class="segment__input" name="segment-a">
+                          <div class="segment__button"> Technology </div>
+                        </div>
+                      </div>
+                </fieldset>
+                <label for=""> Options Type </label>
+                <select name="" id="" class="form-control">
+                    <option value=""> Calls </option>
+                    <option value=""> Puts </option>
+                </select>
+                <label for=""> Volumes not less than (%) </label>
+                <input type="number" class="form-control" placeholder="Trade Volume" value="70">
+                <label for=""> Expiration Dates </label>
+                <select name="" id="" class="form-control">
+                    <option value=""> < 2 Weeks </option>
+                    <option value=""> < 2 months </option>
+                    <option value=""> < 6 months </option>
+                    <option value=""> < 12 months </option>
+                    <option value=""> < 2 yrs </option></6>
+                </select>
+                <fieldset>
+                    <legend> Implied Volatility </legend>
+                    <div class="segment" style="width: 280px; margin: 0 auto;">
+                        <div class="segment__item">
+                          <input type="radio" class="segment__input" name="iv-a" checked>
+                          <div class="segment__button"> Any </div>
+                        </div>
+                        <div class="segment__item">
+                          <input type="radio" class="segment__input" name="iv-a">
+                          <div class="segment__button"> IV % UP </div>
+                        </div>
+                        <div class="segment__item">
+                          <input type="radio" class="segment__input" name="iv-a">
+                          <div class="segment__button"> IV % DOWN </div>
+                        </div>
+                      </div>
+                </fieldset> <br>
+                <button id="filter_btn" class="btn btn-dark">
+                    Filter Details
+                </button>
+            </form>
+        </ons-page>
+    </template>
+    <template id="search.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-back-button> Back </ons-back-button>
+                </div>
+                <div class="center mr-3"> Search Results </div>
+            </ons-toolbar>
+            <form action="" class="form-inline">
+                <input type="text" placeholder="Scan a Ticker" class="form-control w-75">
+                <button class="btn btn-dark p-1 m-1"> <i class="fa fa-search" aria-hidden="true"></i> Search </button>
+                <button onclick="topage('filter', null)" class="btn btn-light p-1 m-1"> <i class="fa fa-filter" aria-hidden="true"></i> </button>
+            </form>
+            <hr>
+            <div id="accordion" role="tablist">
+                <table class="text-muted" width="100%">
+                    <tr>
+                        <th style="width: 90%;"> Symbol </th>
+                        <th> IV % </th>
+                    </tr>
+                </table>
+                <div class="card p-0 shadow">
+                  <div class="card-header bg-success" role="tab" id="headingOne">
+                    <h5 class="mb-0">
+                      <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="text-white">
+                        AAPL - Apple Inc
+                      </a>
+                      <i class="fa fa-arrow-up text-white float-right" aria-hidden="true"> 2.3% </i>
+                    </h5>
+                  </div> 
+                  <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne" style="">
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <tr>
+                                <th>Type</th>
+                                <td>PUT</td>
+                            </tr>
+                            <tr>
+                                <th> Price </th>
+                                <td> 46.33 </td>
+                            </tr>
+                            <tr>
+                                <th> Strike </th>
+                                <td> 35.00 </td>
+                            </tr>
+                            <tr>
+                                <th> Expiry </th>
+                                <td> 38 days </td>
+                            </tr>
+                            <tr>
+                                <th> Volume </th>
+                                <td> 10,073 </td>
+                            </tr>
+                        </table>
+                        <button onclick="topage('ticker', {'data': {'symbol': 'AAPL'}})" class="btn btn-dark"> View </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="card p-0 shadow">
+                  <div class="card-header bg-success" role="tab" id="headingTwo">
+                    <h5 class="mb-0">
+                      <a class="collapsed text-white" data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        TSLA - Tesla Inc.
+                      </a>
+                      <i class="fa fa-arrow-up text-white float-right" aria-hidden="true"> 15% </i>
+                    </h5>
+                  </div>
+                  <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo" style="">
+                    <div class="card-body">
+                      Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
+                    </div>
+                  </div>
+                </div>
+                <div class="card p-0 shadow">
+                    <div class="card-header bg-warning" role="tab" id="headingTwo">
+                      <h5 class="mb-0">
+                        <a class="collapsed text-white" data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                          NVAX - Navavax Inc.
+                        </a>
+                        <i class="fa fa-arrow-down text-white float-right" aria-hidden="true"> 2.3% </i>
+                      </h5>
+                    </div>
+                    <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo" style="">
+                      <div class="card-body">
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
+                      </div>
+                    </div>
+                </div>
+              </div>
+              
+        </ons-page>
+    </template>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>
+        function topage (page, data) {
+            document.querySelector('#myNavigator').pushPage(page+'.html', data);
+        }
+        function search_ticker() {
+            // var ticker = $('#ticker').val();
+            topage('search', null);
+        }
+    </script>
+    <script src="static/jquery.jqcandlestick.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.4/TweenMax.min.js"></script>
+    <script src="static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="static/main.js"></script>
+    <script>
+        
+    </script>
+</body>
 </html>
